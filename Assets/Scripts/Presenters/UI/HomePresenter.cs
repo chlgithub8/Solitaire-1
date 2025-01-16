@@ -9,38 +9,27 @@ namespace Solitaire.Presenters
 {
     public class HomePresenter : OrientationAwarePresenter
     {
-        [SerializeField]
-        private Button _buttonNewMatch;
+        [SerializeField] private Button _buttonNewMatch;
 
-        [SerializeField]
-        private Button _buttonContinue;
+        [SerializeField] private Button _buttonContinue;
 
-        [SerializeField]
-        private Button _buttonOptions;
+        [SerializeField] private Button _buttonOptions;
 
-        [SerializeField]
-        private Button _buttonLeaderboard;
+        [SerializeField] private Button _buttonLeaderboard;
 
-        [SerializeField]
-        private RectTransform _rectCards;
+        [SerializeField] private RectTransform _rectCards;
 
-        [SerializeField]
-        private RectTransform _rectSuitsCenter;
+        [SerializeField] private RectTransform _rectSuitsCenter;
 
-        [SerializeField]
-        private RectTransform _rectSuitsLeft;
+        [SerializeField] private RectTransform _rectSuitsLeft;
 
-        [SerializeField]
-        private RectTransform _rectSuitsRight;
+        [SerializeField] private RectTransform _rectSuitsRight;
 
-        [Inject]
-        private readonly Game _game;
+        [Inject] private readonly Game _game;
 
-        [Inject]
-        private readonly GamePopup _gamePopup;
+        [Inject] private readonly GamePopup _gamePopup;
 
-        [Inject]
-        private readonly GameState _gameState;
+        [Inject] private readonly GameState _gameState;
         private RectTransform _rectLeaderboard;
 
         private RectTransform _rectOptions;
@@ -71,6 +60,9 @@ namespace Solitaire.Presenters
                     PlayAnimationSequence(_orientation.State.Value == Orientation.Landscape)
                 )
                 .AddTo(this);
+
+            // enter game
+            _buttonNewMatch.onClick.Invoke();
         }
 
         protected override void OnOrientationChanged(bool isLandscape)

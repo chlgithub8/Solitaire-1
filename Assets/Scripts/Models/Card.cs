@@ -39,6 +39,7 @@ namespace Solitaire.Models
             Alpha = new FloatReactiveProperty(1);
             IsVisible = new BoolReactiveProperty(true);
             IsInteractable = new BoolReactiveProperty(true);
+            ShakeFlag = new BoolReactiveProperty(false);
         }
 
         public Suits Suit { get; private set; }
@@ -49,6 +50,7 @@ namespace Solitaire.Models
         public FloatReactiveProperty Alpha { get; }
         public BoolReactiveProperty IsVisible { get; }
         public BoolReactiveProperty IsInteractable { get; }
+        public BoolReactiveProperty ShakeFlag { get; }
 
         public Pile Pile { get; set; }
         public Vector3 DragOrigin { get; set; }
@@ -95,12 +97,17 @@ namespace Solitaire.Models
             if (Type == Types.Ace)
                 return 11;
 
-            return (int)Type + 1;
+            return (int) Type + 1;
         }
 
         public void Flip()
         {
             IsFaceUp.Value = !IsFaceUp.Value;
+        }
+
+        public void Shake()
+        {
+            ShakeFlag.Value = !ShakeFlag.Value;
         }
 
         public override string ToString()

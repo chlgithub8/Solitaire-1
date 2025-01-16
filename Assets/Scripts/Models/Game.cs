@@ -30,44 +30,31 @@ namespace Solitaire.Models
             Win
         }
 
-        [Inject]
-        private readonly IAudioService _audioService;
+        [Inject] private readonly IAudioService _audioService;
 
-        [Inject]
-        private readonly Card.Config _cardConfig;
+        [Inject] private readonly Card.Config _cardConfig;
 
-        [Inject]
-        private readonly ICardSpawner _cardSpawner;
+        [Inject] private readonly ICardSpawner _cardSpawner;
 
-        [Inject]
-        private readonly ICommandService _commandService;
+        [Inject] private readonly ICommandService _commandService;
 
-        [Inject]
-        private readonly DrawCardCommand.Factory _drawCardCommandFactory;
+        [Inject] private readonly DrawCardCommand.Factory _drawCardCommandFactory;
 
-        [Inject]
-        private readonly GamePopup _gamePopup;
+        [Inject] private readonly GamePopup _gamePopup;
 
-        [Inject]
-        private readonly GameState _gameState;
+        [Inject] private readonly GameState _gameState;
 
-        [Inject]
-        private readonly IHintService _hintService;
+        [Inject] private readonly IHintService _hintService;
 
-        [Inject]
-        private readonly Leaderboard _leaderboard;
+        [Inject] private readonly Leaderboard _leaderboard;
 
-        [Inject]
-        private readonly MoveCardCommand.Factory _moveCardCommandFactory;
+        [Inject] private readonly MoveCardCommand.Factory _moveCardCommandFactory;
 
-        [Inject]
-        private readonly IMovesService _movesService;
+        [Inject] private readonly IMovesService _movesService;
 
-        [Inject]
-        private readonly IPointsService _pointsService;
+        [Inject] private readonly IPointsService _pointsService;
 
-        [Inject]
-        private readonly RefillStockCommand.Factory _refillStockCommandFactory;
+        [Inject] private readonly RefillStockCommand.Factory _refillStockCommandFactory;
 
         public Game()
         {
@@ -137,6 +124,7 @@ namespace Solitaire.Models
             // Couldn't find move
             if (pile == null)
             {
+                card.Shake();
                 PlayErrorSfx();
                 return;
             }
@@ -216,7 +204,7 @@ namespace Solitaire.Models
             _audioService.PlaySfx(Audio.SfxHint, 0.5f);
 
             // Wait until the animation completes
-            var delayMs = (int)(_cardConfig.AnimationDuration * 1000) + 50;
+            var delayMs = (int) (_cardConfig.AnimationDuration * 1000) + 50;
             await UniTask.Delay(delayMs);
 
             // Despawn copies
@@ -270,7 +258,7 @@ namespace Solitaire.Models
         {
             // Start dealing
             _gameState.State.Value = State.Dealing;
-            var delayMs = (int)(_cardConfig.AnimationDuration * 1000) + 50;
+            var delayMs = (int) (_cardConfig.AnimationDuration * 1000) + 50;
 
             _audioService.PlaySfx(Audio.SfxShuffle, 0.5f);
             await UniTask.Delay(delayMs);

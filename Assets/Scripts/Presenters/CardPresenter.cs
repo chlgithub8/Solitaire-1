@@ -24,33 +24,23 @@ namespace Solitaire.Presenters
         private const float MoveEpsilon = 0.00001f;
         private const int AnimOrder = 100;
 
-        [Header("Sprites")]
-        [SerializeField]
-        private SpriteRenderer _back;
+        [Header("Sprites")] [SerializeField] private SpriteRenderer _back;
 
-        [SerializeField]
-        private SpriteRenderer _front;
+        [SerializeField] private SpriteRenderer _front;
 
-        [SerializeField]
-        private SpriteRenderer _type;
+        [SerializeField] private SpriteRenderer _type;
 
-        [SerializeField]
-        private SpriteRenderer _suit1;
+        [SerializeField] private SpriteRenderer _suit1;
 
-        [SerializeField]
-        private SpriteRenderer _suit2;
+        [SerializeField] private SpriteRenderer _suit2;
 
-        [Inject]
-        private readonly Card _card;
+        [Inject] private readonly Card _card;
 
-        [Inject]
-        private readonly Card.Config _config;
+        [Inject] private readonly Card.Config _config;
 
-        [Inject]
-        private readonly IDragAndDropHandler _dndHandler;
+        [Inject] private readonly IDragAndDropHandler _dndHandler;
 
-        [Inject]
-        private readonly Game _game;
+        [Inject] private readonly Game _game;
         private BoxCollider2D _collider;
         private float _lastClick;
         private IMemoryPool _pool;
@@ -72,6 +62,7 @@ namespace Solitaire.Presenters
             _card.IsInteractable.Subscribe(UpdateInteractability).AddTo(this);
             _card.IsFaceUp.Where(CanFlip).Subscribe(AnimateFlip).AddTo(this);
             _card.Position.Where(CanMove).Subscribe(AnimateMove).AddTo(this);
+            _card.ShakeFlag.Where(CanShake).Subscribe(AnimateShake).AddTo(this);
         }
 
         #region IDisposable
@@ -86,7 +77,7 @@ namespace Solitaire.Presenters
         private bool CanFlip(bool isFaceUp)
         {
             return (isFaceUp && !_front.gameObject.activeSelf)
-                || (!isFaceUp && !_back.gameObject.activeSelf);
+                   || (!isFaceUp && !_back.gameObject.activeSelf);
         }
 
         private void AnimateFlip(bool isFaceUp)
@@ -134,13 +125,20 @@ namespace Solitaire.Presenters
                                 : _card.Order.Value;
                             _card.Order.Value = AnimOrder + _card.OrderToRestore;
                         })
-                        .OnComplete(() =>
-                        {
-                            _card.Order.Value = _card.OrderToRestore;
-                        });
+                        .OnComplete(() => { _card.Order.Value = _card.OrderToRestore; });
                 else
                     _tweenMove.ChangeEndValue(position, true).Restart();
             }
+        }
+
+        private bool CanShake(bool shakeFlag)
+        {
+            return true;
+        }
+
+        private void AnimateShake(bool isShake)
+        {
+            _transform.DOShakePosition(0.1f, 0.2f, 6, 0);
         }
 
         private void UpdateOrder(int order)
@@ -196,13 +194,13 @@ namespace Solitaire.Presenters
             name = $"Card_{_card.Suit}_{_card.Type}";
 
             // Update suit sprites
-            var spriteSuit = _config.SuitSprites[(int)_card.Suit];
+            var spriteSuit = _config.SuitSprites[(int) _card.Suit];
             _suit1.sprite = spriteSuit;
             _suit2.sprite = spriteSuit;
 
             // Update type color and sprite
-            var color = _config.Colors[(int)_card.Suit];
-            var spriteType = _config.TypeSprites[(int)_card.Type];
+            var color = _config.Colors[(int) _card.Suit];
+            var spriteType = _config.TypeSprites[(int) _card.Type];
             _type.sprite = spriteType;
             _type.color = color;
         }
@@ -213,7 +211,9 @@ namespace Solitaire.Presenters
             _front.gameObject.SetActive(isFaceUp);
         }
 
-        public class Factory : PlaceholderFactory<Card.Suits, Card.Types, CardPresenter> { }
+        public class Factory : PlaceholderFactory<Card.Suits, Card.Types, CardPresenter>
+        {
+        }
 
         #region IEventSystemHandlers
 
@@ -269,7 +269,7 @@ namespace Solitaire.Presenters
             {
                 _game.DrawCard();
             }
-            else if (_lastClick + DoubleClickInterval > Time.time)
+            else //if (_lastClick + DoubleClickInterval > Time.time)
             {
                 if (_card.IsMoveable)
                     _game.MoveCard(_card, null);

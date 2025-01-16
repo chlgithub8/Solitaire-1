@@ -168,8 +168,8 @@ namespace Solitaire.Models
             }
 
             // The stock and waste piles should be empty
-            if (PileStock.HasCards || PileWaste.HasCards)
-                return;
+            // if (PileStock.HasCards || PileWaste.HasCards)
+            //     return;
 
             WinAsync().Forget();
         }
@@ -334,29 +334,83 @@ namespace Solitaire.Models
                 cardsInTableaus = 0;
 
                 // Check each tableau pile
-                for (var i = 0; i < PileTableaus.Count; i++)
+                for (var i = 0; i < CacheCards.Count; i++)
                 {
-                    var pileTableau = PileTableaus[i];
-                    var topCard = pileTableau.TopCard();
-                    cardsInTableaus += pileTableau.Cards.Count;
-
-                    // Skip empty pile
-                    if (topCard == null)
+                    var theCard = CacheCards[i];
+                    if (theCard.Pile.IsFoundation)
+                    {
                         continue;
+                    }
+
+                    cardsInTableaus++;
 
                     // Skip card that cannot be moved to a foundation pile
-                    var pileFoundation = _hintService.CheckPilesForMove(PileFoundations, topCard);
-
+                    var pileFoundation = GetFoundationBySuit(theCard);
                     if (pileFoundation == null)
                         continue;
 
+                    if (theCard.IsFaceUp.Value == false)
+                    {
+                        theCard.Flip();
+                    }
+
                     // Move card to the foundation
-                    MoveCard(topCard, pileFoundation);
+                    MoveCard(theCard, pileFoundation);
                     await UniTask.DelayFrame(3);
                 }
             } while (cardsInTableaus > 0);
 
+            // do
+            // {
+            //     cardsInTableaus = 0;
+            //
+            //     // Check each tableau pile
+            //     for (var i = 0; i < PileTableaus.Count; i++)
+            //     {
+            //         var pileTableau = PileTableaus[i];
+            //         var topCard = pileTableau.TopCard();
+            //         cardsInTableaus += pileTableau.Cards.Count;
+            //
+            //         // Skip empty pile
+            //         if (topCard == null)
+            //             continue;
+            //
+            //         // Skip card that cannot be moved to a foundation pile
+            //         var pileFoundation = _hintService.CheckPilesForMove(PileFoundations, topCard);
+            //
+            //         if (pileFoundation == null)
+            //             continue;
+            //
+            //         // Move card to the foundation
+            //         MoveCard(topCard, pileFoundation);
+            //         await UniTask.DelayFrame(3);
+            //     }
+            // } while (cardsInTableaus > 0);
+
             AddPointsAndSaveLeaderboard();
+        }
+
+        private Pile GetFoundationBySuit(Card card)
+        {
+            foreach (var foundation in PileFoundations)
+            {
+                if (foundation.HasCards)
+                {
+                    if (card.Suit == foundation.TopCard().Suit)
+                    {
+                        return foundation;
+                    }
+                }
+                else
+                {
+                    if (card.Type == Card.Types.Ace)
+                    {
+                        return foundation;
+                    }
+                }
+            }
+
+            return null;
         }
 
         private void Restart()

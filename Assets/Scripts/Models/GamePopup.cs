@@ -40,7 +40,7 @@ namespace Solitaire.Models
 
             // Match popup can only be opened while playing
             MatchCommand = new ReactiveCommand(
-                gameState.State.Select(s => s == Game.State.Playing || s == Game.State.Win)
+                gameState.State.Select(s => s is Game.State.Playing or Game.State.Win)
             );
 
             MatchCommand

@@ -27,9 +27,9 @@ namespace Solitaire.Presenters
 
         protected override void OnOrientationChanged(bool isLandscape)
         {
-            _rectPoints.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, isLandscape ? 50 : 0,
+            _rectPoints.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Right, isLandscape ? 50 : 0,
                 _rectPoints.sizeDelta.x);
-            _rectPoints.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Top, isLandscape ? 50 : 0,
+            _rectPoints.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, isLandscape ? 20 : 0,
                 _rectPoints.sizeDelta.y);
 
             _rectMoves.anchorMin = isLandscape ? Vector2.zero : Vector2.one;
@@ -38,7 +38,7 @@ namespace Solitaire.Presenters
             _rectMoves.SetInsetAndSizeFromParentEdge(isLandscape ? RectTransform.Edge.Left : RectTransform.Edge.Right,
                 isLandscape ? 50 : 0, _rectMoves.sizeDelta.x);
             _rectMoves.SetInsetAndSizeFromParentEdge(isLandscape ? RectTransform.Edge.Bottom : RectTransform.Edge.Top,
-                isLandscape ? 120 : 0, _rectMoves.sizeDelta.y);
+                isLandscape ? 20 : 0, _rectMoves.sizeDelta.y);
         }
     }
 }

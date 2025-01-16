@@ -8,10 +8,10 @@ namespace Solitaire.Models
     {
         public enum Suits : byte
         {
+            Spade,
             Club,
             Heart,
             Diamond,
-            Spade,
         }
 
         public enum Types : byte

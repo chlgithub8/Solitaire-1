@@ -22,7 +22,9 @@ namespace Solitaire.Services
         public void SpawnAll()
         {
             // Spawn cards
-            foreach (Card.Suits suit in Enum.GetValues(typeof(Card.Suits)))
+            var suits = new List<Card.Suits>
+                { Card.Suits.Club, Card.Suits.Heart, Card.Suits.Diamond, Card.Suits.Spade };
+            foreach (Card.Suits suit in suits)
             foreach (Card.Types type in Enum.GetValues(typeof(Card.Types)))
                 Cards.Add(Spawn(suit, type));
         }

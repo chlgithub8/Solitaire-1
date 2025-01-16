@@ -49,13 +49,13 @@ namespace Solitaire.Presenters
 
         protected override void OnOrientationChanged(bool isLandscape)
         {
-            _rectOptions.anchoredPosition = new Vector2(isLandscape ? -350 : -275, _rectOptions.anchoredPosition.y);
-            _rectHome.anchoredPosition = new Vector2(isLandscape ? -210 : -165, _rectHome.anchoredPosition.y);
-            _rectMatch.anchoredPosition = new Vector2(isLandscape ? -70 : -55, _rectMatch.anchoredPosition.y);
-            _rectUndo.anchoredPosition = new Vector2(isLandscape ? 70 : 55, _rectUndo.anchoredPosition.y);
-            _rectHint.anchoredPosition = new Vector2(isLandscape ? 210 : 165, _rectHint.anchoredPosition.y);
             _rectLeaderboard.anchoredPosition =
-                new Vector2(isLandscape ? 350 : 275, _rectLeaderboard.anchoredPosition.y);
+                new Vector2(isLandscape ? -350 : -275, _rectLeaderboard.anchoredPosition.y);
+            _rectOptions.anchoredPosition = new Vector2(isLandscape ? -210 : -165, _rectOptions.anchoredPosition.y);
+            _rectHome.anchoredPosition = new Vector2(isLandscape ? -70 : -55, _rectHome.anchoredPosition.y);
+            _rectMatch.anchoredPosition = new Vector2(isLandscape ? 70 : 55, _rectMatch.anchoredPosition.y);
+            _rectHint.anchoredPosition = new Vector2(isLandscape ? 210 : 165, _rectHint.anchoredPosition.y);
+            _rectUndo.anchoredPosition = new Vector2(isLandscape ? 350 : 275, _rectUndo.anchoredPosition.y);
         }
     }
 }

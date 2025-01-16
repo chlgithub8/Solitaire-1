@@ -349,11 +349,6 @@ namespace Solitaire.Models
                     if (pileFoundation == null)
                         continue;
 
-                    if (theCard.IsFaceUp.Value == false)
-                    {
-                        theCard.Flip();
-                    }
-
                     // Move card to the foundation
                     MoveCard(theCard, pileFoundation);
                     await UniTask.DelayFrame(3);

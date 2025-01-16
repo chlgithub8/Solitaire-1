@@ -55,6 +55,7 @@ namespace Solitaire.Presenters
         {
             _collider = GetComponent<BoxCollider2D>();
             _transform = transform;
+            _transform.position = new Vector3(0, 10, 0);
 
             _card.Alpha.Subscribe(UpdateAlpha).AddTo(this);
             _card.Order.Subscribe(UpdateOrder).AddTo(this);

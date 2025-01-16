@@ -2,7 +2,6 @@ using Solitaire.Models;
 using TMPro;
 using UniRx;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Zenject;
 
@@ -10,8 +9,7 @@ namespace Solitaire.Presenters
 {
     public class PopupMatchPresenter : OrientationAwarePresenter
     {
-        [FormerlySerializedAs("_cardCode")] [SerializeField]
-        private TMP_InputField _cardCodeInput;
+        [SerializeField] private TMP_InputField _inputCardCode;
 
         [SerializeField] private Button _buttonRestart;
 
@@ -29,7 +27,7 @@ namespace Solitaire.Presenters
 
         private void Awake()
         {
-            _rectCardCode = _cardCodeInput.GetComponent<RectTransform>();
+            _rectCardCode = _inputCardCode.GetComponent<RectTransform>();
             _rectRestart = _buttonRestart.GetComponent<RectTransform>();
             _rectNewMatch = _buttonNewMatch.GetComponent<RectTransform>();
             _rectContinue = _buttonContinue.GetComponent<RectTransform>();
@@ -40,7 +38,7 @@ namespace Solitaire.Presenters
             base.Start();
 
             // Bind commands
-            _cardCodeInput.onValueChanged.AddListener(OnCardCodeChange);
+            _inputCardCode.onValueChanged.AddListener(OnCardCodeChange);
             _game.RestartCommand.BindTo(_buttonRestart).AddTo(this);
             _game.NewMatchCommand.BindTo(_buttonNewMatch).AddTo(this);
             _game.ContinueCommand.BindTo(_buttonContinue).AddTo(this);

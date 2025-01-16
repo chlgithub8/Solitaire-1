@@ -1894,7 +1894,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8246b62ef2ec8a42b1a5976f8aecff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _cardCode: {fileID: 735593497}
+  _inputCardCode: {fileID: 735593497}
   _buttonRestart: {fileID: 214984709257198158}
   _buttonNewMatch: {fileID: 714346912}
   _buttonContinue: {fileID: 1932455452}
@@ -3154,7 +3154,7 @@ GameObject:
   - component: {fileID: 735593498}
   - component: {fileID: 735593497}
   m_Layer: 5
-  m_Name: CardCode
+  m_Name: InputCardCode
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

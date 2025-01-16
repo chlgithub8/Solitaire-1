@@ -6,6 +6,7 @@ using Solitaire.Commands;
 using Solitaire.Helpers;
 using Solitaire.Services;
 using UniRx;
+using UnityEngine;
 using Zenject;
 using Random = UnityEngine.Random;
 
@@ -60,6 +61,8 @@ namespace Solitaire.Models
         {
             HasStarted = new BoolReactiveProperty(false);
 
+            CardCode = new StringReactiveProperty();
+
             RestartCommand = new ReactiveCommand();
             RestartCommand.Subscribe(_ => Restart()).AddTo(this);
 
@@ -71,6 +74,7 @@ namespace Solitaire.Models
         }
 
         public BoolReactiveProperty HasStarted { get; }
+        public StringReactiveProperty CardCode { get; }
         public ReactiveCommand RestartCommand { get; }
         public ReactiveCommand NewMatchCommand { get; }
         public ReactiveCommand ContinueCommand { get; }
@@ -79,7 +83,8 @@ namespace Solitaire.Models
         public Pile PileWaste { get; private set; }
         public IList<Pile> PileFoundations { get; private set; }
         public IList<Pile> PileTableaus { get; private set; }
-        public IList<Card> Cards { get; private set; }
+        public List<Card> CacheCards { get; private set; }
+        public List<Card> Cards { get; private set; }
 
         public void Init(
             Pile pileStock,
@@ -248,10 +253,40 @@ namespace Solitaire.Models
             for (var i = Cards.Count - 1; i > 0; i--)
             {
                 var n = Random.Range(0, i + 1);
-                var temp = Cards[i];
-                Cards[i] = Cards[n];
-                Cards[n] = temp;
+                (Cards[i], Cards[n]) = (Cards[n], Cards[i]);
             }
+        }
+
+        private void DecodeCardCode(List<Card> paramIn, List<Card> paramOut, string content)
+        {
+            paramOut.Clear();
+            if (string.IsNullOrEmpty(content))
+            {
+                paramOut.AddRange(paramIn);
+                Debug.LogError("Card data is empty");
+                return;
+            }
+
+            var array = content.ToCharArray();
+            foreach (var data in array)
+            {
+                int index = GetCardIndex(data);
+                paramOut.Add(paramIn[index]);
+            }
+
+            paramOut.Reverse();
+        }
+
+        private int GetCardIndex(char card)
+        {
+            // card from A to z;
+
+            if (card >= 97)
+            {
+                return card - 97; // a = 97
+            }
+
+            return card + 26 - 65; //A = 65
         }
 
         private async UniTask DealAsync()
@@ -333,7 +368,15 @@ namespace Solitaire.Models
         private void NewMatch()
         {
             Reset();
-            ShuffleCards();
+            if (string.IsNullOrEmpty(CardCode.Value))
+            {
+                ShuffleCards();
+            }
+            else
+            {
+                DecodeCardCode(CacheCards, Cards, CardCode.Value);
+            }
+
             DealAsync().Forget();
         }
 
@@ -346,7 +389,9 @@ namespace Solitaire.Models
         private void SpawnCards()
         {
             _cardSpawner.SpawnAll();
-            Cards = _cardSpawner.Cards.Select(c => c.Card).ToList();
+            var spawnCards = _cardSpawner.Cards.Select(c => c.Card).ToList();
+            CacheCards = new List<Card>(spawnCards);
+            Cards = new List<Card>(spawnCards);
         }
 
         private void AddPointsAndSaveLeaderboard()

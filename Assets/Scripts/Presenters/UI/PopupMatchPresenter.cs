@@ -1,6 +1,8 @@
 using Solitaire.Models;
+using TMPro;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Zenject;
 
@@ -8,27 +10,26 @@ namespace Solitaire.Presenters
 {
     public class PopupMatchPresenter : OrientationAwarePresenter
     {
-        [SerializeField]
-        private Button _buttonRestart;
+        [FormerlySerializedAs("_cardCode")] [SerializeField]
+        private TMP_InputField _cardCodeInput;
 
-        [SerializeField]
-        private Button _buttonNewMatch;
+        [SerializeField] private Button _buttonRestart;
 
-        [SerializeField]
-        private Button _buttonContinue;
+        [SerializeField] private Button _buttonNewMatch;
 
-        [SerializeField]
-        private RectTransform _panelRect;
+        [SerializeField] private Button _buttonContinue;
 
-        [Inject]
-        private readonly Game _game;
+        [SerializeField] private RectTransform _panelRect;
+
+        [Inject] private readonly Game _game;
+        private RectTransform _rectCardCode;
         private RectTransform _rectContinue;
         private RectTransform _rectNewMatch;
-
         private RectTransform _rectRestart;
 
         private void Awake()
         {
+            _rectCardCode = _cardCodeInput.GetComponent<RectTransform>();
             _rectRestart = _buttonRestart.GetComponent<RectTransform>();
             _rectNewMatch = _buttonNewMatch.GetComponent<RectTransform>();
             _rectContinue = _buttonContinue.GetComponent<RectTransform>();
@@ -39,6 +40,7 @@ namespace Solitaire.Presenters
             base.Start();
 
             // Bind commands
+            _cardCodeInput.onValueChanged.AddListener(OnCardCodeChange);
             _game.RestartCommand.BindTo(_buttonRestart).AddTo(this);
             _game.NewMatchCommand.BindTo(_buttonNewMatch).AddTo(this);
             _game.ContinueCommand.BindTo(_buttonContinue).AddTo(this);
@@ -46,26 +48,41 @@ namespace Solitaire.Presenters
 
         protected override void OnOrientationChanged(bool isLandscape)
         {
-            _panelRect.offsetMin = isLandscape ? new Vector2(250, 200) : new Vector2(150, 250);
-            _panelRect.offsetMax = isLandscape ? new Vector2(-250, -200) : new Vector2(-150, -250);
+            _panelRect.offsetMin = isLandscape ? new Vector2(150, 100) : new Vector2(150, 100);
+            _panelRect.offsetMax = isLandscape ? new Vector2(-150, -100) : new Vector2(-150, -100);
 
-            var size = _rectRestart.sizeDelta;
+            var size = _rectCardCode.sizeDelta;
+            size.y = isLandscape ? 70 : 140;
+            _rectCardCode.sizeDelta = size;
+            _rectCardCode.anchoredPosition = new Vector2(
+                _rectCardCode.anchoredPosition.x,
+                isLandscape ? 100 : 270
+            );
+
+            size = _rectRestart.sizeDelta;
             size.y = isLandscape ? 70 : 140;
             _rectRestart.sizeDelta = size;
             _rectRestart.anchoredPosition = new Vector2(
                 _rectRestart.anchoredPosition.x,
-                isLandscape ? 60 : 130
+                isLandscape ? 0 : 100
             );
+
             _rectNewMatch.sizeDelta = size;
             _rectNewMatch.anchoredPosition = new Vector2(
                 _rectNewMatch.anchoredPosition.x,
-                isLandscape ? -40 : -40
+                isLandscape ? -100 : -70
             );
+
             _rectContinue.sizeDelta = size;
             _rectContinue.anchoredPosition = new Vector2(
                 _rectContinue.anchoredPosition.x,
-                isLandscape ? -140 : -210
+                isLandscape ? -200 : -240
             );
+        }
+
+        private void OnCardCodeChange(string content)
+        {
+            _game.CardCode.Value = content;
         }
     }
 }

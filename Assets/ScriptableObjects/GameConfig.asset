@@ -23,14 +23,14 @@ MonoBehaviour:
     AnimationDuration: 0.25
     Colors:
     - {r: 0, g: 0, b: 0, a: 1}
+    - {r: 0.77254903, g: 0.1882353, b: 0.21960784, a: 1}
+    - {r: 0.7725491, g: 0.18823531, b: 0.21960786, a: 1}
     - {r: 0, g: 0, b: 0, a: 1}
-    - {r: 0.7725491, g: 0.18823531, b: 0.21960786, a: 1}
-    - {r: 0.7725491, g: 0.18823531, b: 0.21960786, a: 1}
     SuitSprites:
-    - {fileID: 21300000, guid: 2c6d6cad90711eb408240c39100ef4cf, type: 3}
     - {fileID: 21300000, guid: fff36812c0ddf3846bd365ec8aa8b832, type: 3}
     - {fileID: 21300000, guid: 4dbde7c7f6bcf0b42824e9b779fd1dfe, type: 3}
     - {fileID: 21300000, guid: 01eefc40193f959478d13cd25b298a67, type: 3}
+    - {fileID: 21300000, guid: 2c6d6cad90711eb408240c39100ef4cf, type: 3}
     TypeSprites:
     - {fileID: 21300000, guid: bfa3036e16836e24e90c66d00c54438b, type: 3}
     - {fileID: 21300000, guid: cca028ad0bca34d4d8924e143aeac0f3, type: 3}
@@ -46,7 +46,6 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 1303b1693f3257d45b7ce407bc1fdec7, type: 3}
     - {fileID: 21300000, guid: 38de620951d510c4dbfd223e1e11d2d7, type: 3}
   _audio:
-    MusicVolume: 0.2
     AudioClips:
     - {fileID: 8300000, guid: 11335588942bbd5449bd5e612908f09c, type: 3}
     - {fileID: 8300000, guid: d372c3c1265b3428b93b791dd44035a1, type: 3}
